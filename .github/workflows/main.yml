@@ -1,0 +1,19 @@
+# https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/
+# https://github.com/marketplace/actions/github-action-for-flyctl
+name: Fly.io
+
+on:
+  push:
+    branches: [production]
+
+jobs:
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: superfly/flyctl-actions@1.1
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        with:
+          args: "deploy"
