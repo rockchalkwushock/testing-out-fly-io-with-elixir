@@ -1,0 +1,39 @@
+# fly.toml file generated for hidden-silence-7937 on 2021-05-29T10:04:18-05:00
+
+app = "hidden-silence-7937"
+
+kill_signal = "SIGTERM"
+kill_timeout = 5
+
+[env]
+
+[deploy]
+  release_command = "/app/bin/fly_io_test eval FlyIoTest.Release.migrate"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[services]]
+  internal_port = 4000
+  protocol = "tcp"
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    # fly.io will make the app https by default.
+    # so no need to changes this here.
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "30s"
+    interval = "15s"
+    restart_limit = 6
+    timeout = "2s"
