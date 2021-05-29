@@ -6,7 +6,11 @@ defmodule FlyIoTest.Application do
   use Application
 
   def start(_type, _args) do
+    topologies = Application.get_env(:libcluster, :topologies) || []
+
     children = [
+      # setup for clustering
+      {Cluster.Supervisor, [topologies, [name: HelloElixir.ClusterSupervisor]]},
       # Start the Ecto repository
       FlyIoTest.Repo,
       # Start the Telemetry supervisor
